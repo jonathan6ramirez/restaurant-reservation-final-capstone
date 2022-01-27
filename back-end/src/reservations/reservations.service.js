@@ -1,5 +1,9 @@
 const knex = require("../db/connection");
 
+function list() {
+    return knex("reservations").select("*");
+}
+
 function create(reservation) {
     return knex("reservations")
     .insert(reservation)
@@ -24,6 +28,7 @@ function destroy(reservation_id) {
 }
 
 module.exports = {
+    list,
     create,
     read,
     update,
