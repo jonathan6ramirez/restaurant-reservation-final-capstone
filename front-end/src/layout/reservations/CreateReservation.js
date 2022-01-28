@@ -5,7 +5,9 @@ import Button from "react-bootstrap/Button"
 
 // Util Functions
 import { today } from "../../utils/date-time"
+import ErrorAlert from "../ErrorAlert"
 const moment = require("moment");
+
 // This is going to be the main page for the `reservations/new` route
 // The create and edit form will be the same component that will display
 // the correct paramters based on if there is a reservation parameter/state
@@ -13,10 +15,10 @@ const moment = require("moment");
 
 
 function CreateReservation() {
-    // The history object
+    // The history object used to move the user to the dashboard after the form is submitted.
     const history = useHistory();
 
-    //State for the object to submit
+    // Initial form state
     const initialFormState = {
         first_name: "",
         last_name: "",
@@ -25,7 +27,13 @@ function CreateReservation() {
         reservation_time: "",
         people: "",
     }
+
+    // State for the object to submit
     const [form, setForm] = useState({ ...initialFormState});
+    
+    // This is the state that will check to see if there is an error
+    // The submitHandler will verify the form and set this state 
+    // to the error according to the user story guidlines.
     const [err, setErr] = useState(null);
 
     // Handles the form change
@@ -70,6 +78,7 @@ function CreateReservation() {
 
     return (
         <React.Fragment>
+            <ErrorAlert error={err} />
             <h2 className="text-center">Create A Reservation</h2>
             <Form id="CreateReservationForm" >
                 <Form.Group>
