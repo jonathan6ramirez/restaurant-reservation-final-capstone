@@ -28,8 +28,8 @@ function CreateReservation() {
         people: "",
     }
 
-    // State for the object to submit
-    const [form, setForm] = useState({ ...initialFormState});
+    // State for the form
+    const [form, setForm] = useState({ ...initialFormState });
     
     // This is the state that will check to see if there is an error
     // The submitHandler will verify the form and set this state 
@@ -46,6 +46,7 @@ function CreateReservation() {
 
     // Handles when the user clicks the submit button
     const handleSubmit = (event) => {
+        event.preventDefault();
         const currentDay = today();
         const currentTime = moment().format('HH:mm');
         const givenDate = new Date(form.reservation_date + " " + form.reservation_time);
@@ -63,16 +64,9 @@ function CreateReservation() {
             console.log("!! CANNOT MAKE AN RSVP IN THE PAST !!")
             return setErr(true);
         }
-        //console.log(currentTime > form.reservation_time, "currenttime > reservation_time")
-
-        //console.log(givenDate.getDay(), "this is the given day");
-        //console.log(givenDate.getFullYear(), "this is the given year");
-        //console.log(givenDate.getMonth() + 1, "this is the given month")
-        //const formattedDate = givenDate.getFullYear() + "-" + (givenDate.getMonth + 1) + "-" + givenDate.getDay()
-        //console.log(form.reservation_date, "form date")
-        //console.log(currentDay, "this is the current time and date")
-        //console.log(currentDay > form.reservation_date, "greater than")
+        // Clean up the form state
         setForm({...initialFormState})
+        /*!!!! Dont forget to uncomment the push to the history object !!!! */
         //history.push("/dashboard")
     }
 
