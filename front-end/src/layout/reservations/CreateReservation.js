@@ -35,6 +35,7 @@ function CreateReservation() {
     const [tuesday, setTuesday] = useState(null);
     // This is the the error object that holds the past tense error
     const [pastTense, setPastTense] = useState(null)
+
     // Handles the form change
     const handleChange = ({ target }) => {
         setForm({
@@ -46,33 +47,38 @@ function CreateReservation() {
     // Handles when the user clicks the submit button
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        // Initialize the variables to make the validations
         const currentDay = today();
         const currentTime = moment().format('HH:mm');
         const givenDate = new Date(form.reservation_date + " " + form.reservation_time);
         const day = givenDate.getDay();
-        event.preventDefault();
+
         if (day === 2){
             console.log("!! CANNOT MAKE RSVPS ON TUESDAYS !!");
             return setErr({message: "!! CANNOT MAKE RSVPS ON TUESDAYS !!"});
-        } else if (currentDay === form.reservation_date) {
+        } 
+        if (currentDay === form.reservation_date) {
             if(currentTime > form.reservation_time){
-                console.log("!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!")
-                return setErr({message: "!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!"})
+                console.log("!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!");
+                return setErr({message: "!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!"});
             }
-        }else if (currentDay > form.reservation_date){
-            console.log("!! CANNOT MAKE AN RSVP IN THE PAST !!")
+        }
+        if (currentDay > form.reservation_date){
+            console.log("!! CANNOT MAKE AN RSVP IN THE PAST !!");
             return setErr(true);
         }
+
         // Clean up the form state
-        setForm({...initialFormState})
-        /*!!!! Dont forget to uncomment the push to the history object !!!! */
-        //history.push("/dashboard")
+        setForm({...initialFormState});
+        history.push("/dashboard");
     }
 
     return (
         <React.Fragment>
             <ErrorAlert error={err} />
             <h2 className="text-center">Create A Reservation</h2>
+
             <Form id="CreateReservationForm" >
                 <Form.Group>
                     <Form.Label>First Name</Form.Label> 
@@ -134,6 +140,7 @@ function CreateReservation() {
                     />
                 </Form.Group>
             </Form>
+
             <div className="mt-2">
                 <Button 
                     variant="secondary" 
@@ -147,7 +154,7 @@ function CreateReservation() {
                     >Submit</Button>
             </div>
         </React.Fragment>
-    )
-}
+    );
+};
 
 export default CreateReservation
