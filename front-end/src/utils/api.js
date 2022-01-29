@@ -67,3 +67,52 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+/*
+* @param reservation
+* the reservation object to be created
+* @signal
+* optional AbortController.signal
+*/
+export async function createReservation(reservation, signal) {
+  const url = new Url(`${API_BASE_URL}/reservations/new`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify(reservation),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
+/*
+* @param table
+* the table object to be created
+* @signal
+* optional AbortController.signal
+*/
+export async function createTable(table, signal) {
+  const url = new Url(`${API_BASE_URL}/tables/new`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify(table),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
+/**
+ * !!!make this into the reservations/reservationId/seat call 
+ * Retrieves the deck with the specified `deckId`
+ * @param 
+ *  the `id` property matching the desired deck.
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<any>}
+ *  a promise that resolves to the saved deck.
+ */
+ export async function readDeck(deckId, signal) {
+  const url = `${API_BASE_URL}/decks/${deckId}?_embed=cards`;
+  return await fetchJson(url, { signal }, {});
+}
