@@ -28,6 +28,7 @@ function SearchPage() {
         event.preventDefault();
         // Set the searched state to true so the reservations will show
         clickedSearch(true);
+        console.log(form)
         // check to see if the phone number is in the correct format
         // make the call to the api for the reservations
         // check to see if the call is empty
@@ -45,12 +46,14 @@ function SearchPage() {
                         name="mobile_number"
                         placeholder="Enter a customer's phone number"
                         type="text"
+                        onChange={handleChange}
+                        require={true}
                     />
                 </Form.Group>
 
                 <Button
                     variant="primary"
-
+                    onClick={handleSubmit}
                     >Search</Button>
 
             </Form>
