@@ -37,7 +37,11 @@ function CreateTable() {
         // Check to see the form is valid
         if(form.capacity < 1){
             console.log("!! Must seat at least 1 person !!")
-            setErr(true)
+            return setErr({message: "!! Must seat at least 1 person !!"})
+        }
+        if(form.table_name.length < 2){
+            console.log("!! table name must be at least 2 characters !!")
+            return setErr({message: "!! table name must be at least 2 characters !!"})
         }
         console.log("! submit button clicked !")
     }

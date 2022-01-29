@@ -32,10 +32,9 @@ function CreateReservation() {
     const [form, setForm] = useState({ ...initialFormState });
     
     // This is the state that will check to see if there is an error
-    // The submitHandler will verify the form and set this state 
-    // to the error according to the user story guidlines.
-    const [err, setErr] = useState(null);
-
+    const [tuesday, setTuesday] = useState(null);
+    // This is the the error object that holds the past tense error
+    const [pastTense, setPastTense] = useState(null)
     // Handles the form change
     const handleChange = ({ target }) => {
         setForm({
@@ -54,11 +53,11 @@ function CreateReservation() {
         event.preventDefault();
         if (day === 2){
             console.log("!! CANNOT MAKE RSVPS ON TUESDAYS !!");
-            return setErr(true);
+            return setErr({message: "!! CANNOT MAKE RSVPS ON TUESDAYS !!"});
         } else if (currentDay === form.reservation_date) {
             if(currentTime > form.reservation_time){
                 console.log("!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!")
-                return setErr(true)
+                return setErr({message: "!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!"})
             }
         }else if (currentDay > form.reservation_date){
             console.log("!! CANNOT MAKE AN RSVP IN THE PAST !!")
