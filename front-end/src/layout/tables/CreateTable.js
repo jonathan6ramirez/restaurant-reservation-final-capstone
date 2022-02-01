@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 
 import ErrorAlert from "../ErrorAlert";
+import { createTable } from "../../utils/api";
 
 function CreateTable() {
     // Used to take the user back a page if they cancel the submission
@@ -36,16 +37,16 @@ function CreateTable() {
         event.preventDefault();
         // Check to see the form is valid
         if(form.capacity < 1){
-            console.log("!! Must seat at least 1 person !!")
             return setErr({message: "!! Must seat at least 1 person !!"})
         }
         if(form.table_name.length < 2){
-            console.log("!! table name must be at least 2 characters !!")
             return setErr({message: "!! table name must be at least 2 characters !!"})
         }
+        // Send the user to the dashboard page after the table is created
+        await createTable(form);
+        history.push("/dashboard");
         //Clean up
         setForm({ ...initialFormState })
-        console.log("! submit button clicked !")
     }
 
     return (
