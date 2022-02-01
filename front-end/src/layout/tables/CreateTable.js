@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom"
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
+import { Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
-import ErrorAlert from require("../ErrorAlert");
+import ErrorAlert from "../ErrorAlert";
 
 function CreateTable() {
     // Used to take the user back a page if they cancel the submission
@@ -32,7 +32,7 @@ function CreateTable() {
     };
 
     // Handles when the form is submitted
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         // Check to see the form is valid
         if(form.capacity < 1){
@@ -43,46 +43,49 @@ function CreateTable() {
             console.log("!! table name must be at least 2 characters !!")
             return setErr({message: "!! table name must be at least 2 characters !!"})
         }
+        //Clean up
+        setForm({ ...initialFormState })
         console.log("! submit button clicked !")
     }
 
     return (
-        <React.Fragment>
-            <ErrorAlert />
-            <h3 className="text-center" >Create A Table</h3>
-            <Form>
-                <Form.Group>
-                    <Form.Lable>Table Name:</Form.Lable>
-                    <Form.Control
-                        type="text"
-                        name="table_name"
-                        onChange={ handleChange }
-                        required={true}
-                    />
-                </Form.Group>
+    <React.Fragment >
+        <ErrorAlert error={err} />
+        <h3 className="text-center" >Create A Table</h3>
+        <Form onSubmit={ handleSubmit }>
+            <Form.Group>
+                <Form.Label>Table Name:</Form.Label>
+                <Form.Control
+                    type="text"
+                    name="table_name"
+                    onChange={ handleChange }
+                    required
+                />
+            </Form.Group>
 
-                <Form.Group>
-                    <Form.Lable>Capacity: </Form.Lable>
-                    <Form.Control 
-                        type="text"
-                        name="capacity"
-                        require={true}
-                        onChange={ handleChange }
-                    />
-                </Form.Group>
-            </Form>
+            <Form.Group>
+                <Form.Label>Capacity: </Form.Label>
+                <Form.Control
+                    type="text"
+                    name="capacity"
+                    onChange={ handleChange }
+                    required
+                />
+            </Form.Group>
             <div className="mt-2">
                 <Button
-                    varaint="secondary"
-                    onClick={() => history.goBack()}
+                variant="secondary"
+                onClick={() => history.goBack()}
                     >Cancel</Button>
-
                 <Button
-                    className="primary"
-                    onClick={ handleSubmit }
+                    type="submit"
+                    variant="primary"
+                    className="ms-2"
                     >Submit</Button>
             </div>
-        </React.Fragment>
+        </Form>
+
+    </React.Fragment>
     )
 } 
 

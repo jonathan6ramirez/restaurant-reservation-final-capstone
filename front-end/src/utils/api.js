@@ -75,7 +75,7 @@ export async function listReservations(params, signal) {
 * optional AbortController.signal
 */
 export async function createReservation(reservation, signal) {
-  const url = new Url(`${API_BASE_URL}/reservations/new`);
+  const url = new URL(`${API_BASE_URL}/reservations/new`);
   const options = {
     method: "POST",
     headers,
@@ -92,7 +92,7 @@ export async function createReservation(reservation, signal) {
 * optional AbortController.signal
 */
 export async function createTable(table, signal) {
-  const url = new Url(`${API_BASE_URL}/tables/new`);
+  const url = new URL(`${API_BASE_URL}/tables/new`);
   const options = {
     method: "POST",
     headers,
