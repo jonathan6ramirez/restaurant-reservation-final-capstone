@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button"
 import { today } from "../../utils/date-time"
 import ErrorAlert from "../ErrorAlert"
 const moment = require("moment");
+import { createReservation } from "../../utils/api"
 
 // This is going to be the main page for the `reservations/new` route
 // The create and edit form will be the same component that will display
@@ -112,7 +113,10 @@ function CreateReservation() {
             console.log(errors.length, "errors have occured")
             return
         }
+
         console.log(form, "this is the form state")
+        // Make the call to the API
+        await createReservation(form);
         // Clean up the form state
         setForm({...initialFormState});
         history.push("/dashboard");
