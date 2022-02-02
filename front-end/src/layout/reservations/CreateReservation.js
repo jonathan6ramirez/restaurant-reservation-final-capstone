@@ -6,8 +6,9 @@ import Button from "react-bootstrap/Button"
 // Util Functions
 import { today } from "../../utils/date-time"
 import ErrorAlert from "../ErrorAlert"
-const moment = require("moment");
 import { createReservation } from "../../utils/api"
+
+const moment = require("moment");
 
 // This is going to be the main page for the `reservations/new` route
 // The create and edit form will be the same component that will display
@@ -116,7 +117,8 @@ function CreateReservation() {
 
         console.log(form, "this is the form state")
         // Make the call to the API
-        await createReservation(form);
+        const response = await createReservation(form);
+        console.log(response, "this is the response from the api ")
         // Clean up the form state
         setForm({...initialFormState});
         history.push("/dashboard");
