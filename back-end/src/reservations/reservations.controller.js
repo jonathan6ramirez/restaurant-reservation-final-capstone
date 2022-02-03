@@ -34,9 +34,28 @@ function hasOnlyValidProperties(req, res, next) {
 }
 
 function validateProperties(req, res, next){
-  const data  = req.body;
-  //console.log(data, "this is the data from the request");
-  //console.log(moment(), "this is current time");
+  const { data }  = req.body;
+  const validateDate = moment(data.reservation_date).isValid();
+  const validateTime = moment(data.reservation_time).isValid();
+  console.log(data.reservation_date);
+  console.log(data.reservation_time);
+  if(!validateDate){
+    return next({
+      status: 400,
+      message: "reservation_date IS INVALID"
+    })
+  }
+  if(!validateTime){
+    return next({
+      status: 400,
+      message: "reservation_time IS INVALID"
+    })
+  }
+  console.log("------",data.people, "------")
+  if((data.people).isNaN()){
+    console.log("people is NaN")
+    console.log(data.people)
+  }
 
   //*Initialize the variables to make the validations
   const currentDay = dateTime.today;
@@ -50,28 +69,28 @@ function validateProperties(req, res, next){
 
   //*Validations
   if (day === 2){
-    next({
+    return next({
       status: 400,
       message: "!! CANNOT MAKE RSVPS ON TUESDAYS !!"
     })
   } 
   if (currentDay === data.reservation_date) {
     if(currentTime > data.reservation_time){
-      next({
+      return next({
         status: 400,
         message: "!! RSVP TIME CANNOT BE BEFORE THE CURRENT TIME !!"
       })
     }
   }
   if (currentDay > data.reservation_date){
-    next({
+    return next({
       status: 400,
       message: "!! CANNOT MAKE AN RSVP IN THE PAST !!"
     })
   }
   if(closingTime.getHours() === givenDate.getHours()){
     if(closingTime.getMinutes() < givenDate.getMinutes()){
-      next({
+      return next({
         status: 400,
         message: "!! CANNOT MAKE THE RESERVATION LESS THAN 1HR BEFORE WE CLOSE !!"
       })
@@ -79,33 +98,40 @@ function validateProperties(req, res, next){
   }
   if(openingTime.getHours() === givenDate.getHours() ){
     if( openingTime.getMinutes() > givenDate.getMinutes()){
-      next({
+      return next({
         status: 400,
         message: "!! CANNOT MAKE THE RESERVATION BEFORE WE OPEN !!"
       })
     }
   }
   if (openingTime.getHours() > givenDate.getHours()){
-    next({
+    return next({
       status: 400,
       message: "!! CANNOT MAKE THE RESERVATION BEFORE WE OPEN !!"
     })
   }
   if (closingTime.getHours() < givenDate.getHours()){
-    next({
+    return next({
       status: 400,
       message: "!! CANNOT MAKE THE RESERVATION AFTER WE CLOSE!!"
     })
   }
   if (data.people < 1){
-    next({
+    return next({
       status: 400,
       message: "!! CANNOT MAKE A RESERVATION WITHOUT AT LEAST 1 PERSON !!"
     })
+    ;
   }
-  console.log("!!passed the validations!!")
-  res.locals.reservation = data;
+  next()
 }
+const hasRequiredProperties = hasProperties(  "first_name",
+"last_name",
+"mobile_number",
+"reservation_date",
+"reservation_time",
+"people",
+)
 
 // CRUD Functions
 async function list(req, res) {
@@ -114,17 +140,17 @@ async function list(req, res) {
 }
 
 async function create(req, res){
-  console.log(res.locals.reservation, "this is the reservation")
-  //console.log(req.body, "this is the body of the request")
-  //const data = await reservationsService.create(req.body);
-  //console.log(data, "this is the response from the server")
-  //res.status(201).json({ data });
+  //console.log(req.body)
+  const data = await reservationsService.create(req.body);
+  res.status(201).json({ data });
 }
 
 module.exports = {
   list,
   create: [
     hasOnlyValidProperties,
+    hasRequiredProperties,
     validateProperties,
+    asyncErrorBoundary(create)
   ],
 };

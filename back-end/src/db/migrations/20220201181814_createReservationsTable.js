@@ -12,5 +12,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.dropTable("reservations");
+    return knex.schema.dropTable("reservations");
 };

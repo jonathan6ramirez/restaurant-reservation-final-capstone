@@ -109,16 +109,13 @@ function CreateReservation() {
 
         // Check the document to see if any errors were thrown
         let errors = await document.getElementsByClassName("alert alert-danger m-2")
-        console.log(errors.length, "this is the errors object")
+        
         if(errors.length > 0){
-            console.log(errors.length, "errors have occured")
+            
             return
         }
-
-        console.log(form, "this is the form state")
         // Make the call to the API
-        const response = await createReservation(form);
-        console.log(response, "this is the response from the api ")
+        await createReservation(form);
         // Clean up the form state
         setForm({...initialFormState});
         history.push("/dashboard");
