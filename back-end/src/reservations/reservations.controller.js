@@ -35,26 +35,28 @@ function hasOnlyValidProperties(req, res, next) {
 
 function validateProperties(req, res, next){
   const { data }  = req.body;
-  const validateDate = moment(data.reservation_date).isValid();
-  const validateTime = moment(data.reservation_time).isValid();
-  console.log(data.reservation_date);
-  console.log(data.reservation_time);
-  if(!validateDate){
+
+  const dateArray = data.reservation_date.split("-")
+  const validateDate = moment(dateArray).format();
+  const validateTimeUsingObject = new Date(data.reservation_date + " " + data.reservation_time);
+  
+  if(validateDate == "Invalid date"){
     return next({
       status: 400,
       message: "reservation_date IS INVALID"
     })
   }
-  if(!validateTime){
+  if(validateTimeUsingObject == "Invalid Date"){
     return next({
       status: 400,
       message: "reservation_time IS INVALID"
     })
   }
-  console.log("------",data.people, "------")
-  if((data.people).isNaN()){
-    console.log("people is NaN")
-    console.log(data.people)
+  if(typeof(data.people) == "string"){
+    return next({
+      status: 400,
+      message: "people IS INVALID"
+    })
   }
 
   //*Initialize the variables to make the validations
@@ -67,6 +69,7 @@ function validateProperties(req, res, next){
   const openingTime = new Date(data.reservation_date + " " + "10:30");
   const closingTime = new Date(data.reservation_date + " " + "21:30");
 
+  
   //*Validations
   if (day === 2){
     return next({
@@ -140,8 +143,8 @@ async function list(req, res) {
 }
 
 async function create(req, res){
-  //console.log(req.body)
-  const data = await reservationsService.create(req.body);
+  const reservation = req.body.data;
+  const data = await reservationsService.create(reservation);
   res.status(201).json({ data });
 }
 

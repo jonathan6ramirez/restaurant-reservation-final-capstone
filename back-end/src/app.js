@@ -12,7 +12,7 @@ const reservationsRouter = require("./reservations/reservations.router");
 
 const app = express();
 
-app.use(morgan());
+//app.use(morgan());
 app.use(cors());
 app.use(express.json());
 
