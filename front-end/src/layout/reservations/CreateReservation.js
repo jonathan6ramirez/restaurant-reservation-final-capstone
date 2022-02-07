@@ -31,7 +31,7 @@ function CreateReservation() {
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: "",
+        people: 0,
     }
 
     // State for the form
@@ -114,8 +114,12 @@ function CreateReservation() {
             
             return
         }
+        form["people"] = Number(form["people"])
+        const data = {...form}
+        console.log(data, "this is the data from the form")
+        console.log(typeof(data.people), "this is the type of the people value")
         // Make the call to the API
-        await createReservation(form);
+        await createReservation({ data });
         // Clean up the form state
         setForm({...initialFormState});
         history.push("/dashboard");
@@ -183,7 +187,9 @@ function CreateReservation() {
                 <Form.Group>
                     <Form.Label># of Guests</Form.Label>
                     <Form.Control 
-                        type="text" 
+                        type="number"
+                        min="1"
+                        max="20"
                         name="people"
                         onChange={handleChange}
                         required

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import Card from "react-bootstrap/Card"
+import Button from "react-bootstrap/Button";
 
 /**
  * Defines the dashboard page.
@@ -13,6 +15,23 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
+  
+  const mapOutReservations = (reservation, index) => {
+    return (
+      <div key={index} className="row justify-content-center" >
+        <Card>
+          <Card.Header as="h5">Reservation for : {reservation.first_name} {reservation.last_name}</Card.Header>
+          <Card.Body>
+            <Card.Title>Reservation Time: {reservation.reservation_time}</Card.Title>
+            <Card.Text>
+              People: {reservation.people}
+            </Card.Text>
+            <Button variant="primary" href={`reservations/${reservation.reservation_id}/seat`} >Seat</Button>
+          </Card.Body>
+        </Card>
+      </div>
+    )
+  }
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -27,10 +46,10 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {reservations.map(mapOutReservations)}
     </main>
   );
 }

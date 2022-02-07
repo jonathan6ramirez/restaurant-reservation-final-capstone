@@ -1,4 +1,3 @@
-const dateTime = require("../utils/date-time")
 const reservationsService = require("./reservations.service");
 const moment = require("moment")
 
@@ -16,6 +15,17 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
 ];
+
+//Helper functions
+function asDateString(date) {
+  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
+  .toString(10)
+  .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
+}
+
+function today() {
+  return asDateString(new Date());
+}
 
 //Middleware
 function hasOnlyValidProperties(req, res, next) {
@@ -52,7 +62,7 @@ function validateProperties(req, res, next){
       message: "reservation_time IS INVALID"
     })
   }
-  if(typeof(data.people) == "string"){
+  if(typeof(data.people) !== "number"){
     return next({
       status: 400,
       message: "people IS INVALID"
@@ -60,7 +70,7 @@ function validateProperties(req, res, next){
   }
 
   //*Initialize the variables to make the validations
-  const currentDay = dateTime.today;
+  const currentDay = today();
   const currentTime = moment().format("HH:mm");
   const givenDate = new Date(data.reservation_date + " " + data.reservation_time);
   const day = givenDate.getDay();
@@ -74,7 +84,7 @@ function validateProperties(req, res, next){
   if (day === 2){
     return next({
       status: 400,
-      message: "!! CANNOT MAKE RSVPS ON TUESDAYS !!"
+      message: "!! closed !!"
     })
   } 
   if (currentDay === data.reservation_date) {
@@ -88,7 +98,7 @@ function validateProperties(req, res, next){
   if (currentDay > data.reservation_date){
     return next({
       status: 400,
-      message: "!! CANNOT MAKE AN RSVP IN THE PAST !!"
+      message: "!! future RESERVATIONS ONLY !!"
     })
   }
   if(closingTime.getHours() === givenDate.getHours()){
@@ -138,7 +148,13 @@ const hasRequiredProperties = hasProperties(  "first_name",
 
 // CRUD Functions
 async function list(req, res) {
-  const data = await reservationsService.list();
+  const date = req.query.date
+  let data;
+  if (date){
+    data = await reservationsService.listByDate(date);
+  } else {
+    data = await reservationsService.list();
+  }
   res.json({ data });
 }
 
