@@ -82,6 +82,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+
   return (
     <main>
       <h1>Dashboard</h1>
