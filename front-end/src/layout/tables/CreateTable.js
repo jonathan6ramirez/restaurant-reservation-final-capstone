@@ -43,7 +43,9 @@ function CreateTable() {
             return setErr({message: "!! table name must be at least 2 characters !!"})
         }
         // Send the user to the dashboard page after the table is created
-        await createTable(form);
+        form["capacity"] = Number(form["capacity"])
+        const data = { ...form };
+        await createTable({ data });
         history.push("/dashboard");
         //Clean up
         setForm({ ...initialFormState })

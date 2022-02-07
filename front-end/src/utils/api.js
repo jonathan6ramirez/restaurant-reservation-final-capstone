@@ -101,7 +101,7 @@ export async function createReservation(reservation, signal) {
 * optional AbortController.signal
 */
 export async function createTable(table, signal) {
-  const url = new URL(`${API_BASE_URL}/tables/new`);
+  const url = new URL(`${API_BASE_URL}/tables`);
   const options = {
     method: "POST",
     headers,

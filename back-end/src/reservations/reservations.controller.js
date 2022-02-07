@@ -138,6 +138,7 @@ function validateProperties(req, res, next){
   }
   next()
 }
+
 const hasRequiredProperties = hasProperties(  "first_name",
 "last_name",
 "mobile_number",

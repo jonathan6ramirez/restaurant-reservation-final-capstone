@@ -116,8 +116,6 @@ function CreateReservation() {
         }
         form["people"] = Number(form["people"])
         const data = {...form}
-        console.log(data, "this is the data from the form")
-        console.log(typeof(data.people), "this is the type of the people value")
         // Make the call to the API
         await createReservation({ data });
         // Clean up the form state
