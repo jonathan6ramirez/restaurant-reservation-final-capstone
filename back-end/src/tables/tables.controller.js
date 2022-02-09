@@ -33,7 +33,14 @@ async function create(req, res){
     res.status(201).json({ data });
 }
 
+async function list(req, res){
+    const data = await tablesService.list();
+    console.log(data, "this is the data returned from the knex call to the database inside the tables controller")
+    res.json({ data })
+}
+
 module.exports = {
+    list,
     create: [
         hasOnlyValidProperties,
         hasRequiredProperties,

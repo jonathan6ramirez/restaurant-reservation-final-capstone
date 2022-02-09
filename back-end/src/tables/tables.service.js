@@ -14,4 +14,5 @@ function create(table) {
 
 module.exports = {
     create,
+    list,
 }

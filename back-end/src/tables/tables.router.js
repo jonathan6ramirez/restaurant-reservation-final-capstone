@@ -5,6 +5,7 @@ const { route } = require("../app")
 
 router
     .route("/")
+    .get(controller.list)
     .post(controller.create)
     .all(methodNotAllowed)
 

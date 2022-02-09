@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button";
@@ -13,31 +14,11 @@ import Button from "react-bootstrap/Button";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTableError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
-  let tables = [
-    {
-      table_name: "Bar #1",
-      capacity: 1,
-      is_occupied: null,
-    },
-    {
-      table_name: "Bar #2",
-      capacity: 1,
-      is_occupied: null,
-    },
-    {
-      table_name: "#1",
-      capacity: 6,
-      is_occupied: null,
-    },
-    {
-      table_name: "#2",
-      capacity: 6,
-      is_occupied: null,
-    }
-  ]
 
 
   // * Mapper functions
@@ -79,9 +60,12 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setTableError);
+
     return () => abortController.abort();
   }
-
 
   return (
     <main>
@@ -90,6 +74,7 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
       {reservations.map(mapOutReservations)}
 
       <div className="d-md-flex mt-4 mb-3">
