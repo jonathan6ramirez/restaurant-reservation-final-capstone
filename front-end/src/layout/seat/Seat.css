@@ -1,0 +1,44 @@
+.seat__main-container {
+margin-left: 10px;
+margin-top: 20px;
+border: solid 1px grey;
+border-radius: 10px;
+height: 100%;
+}
+
+.seat__main-title {
+    text-align: center;
+}
+
+.seat__input-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.seat__dropdown-container {
+    border-radius: 5px;
+}
+
+.seat__err-message {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.seat__button-cancel {
+    background-color: darkgray;
+    border: solid 1px darkgray;
+    height: 40px;
+    display: flex;
+}
+
+.seat__button-cancel:hover {
+    border: solid 1px grey;
+    background-color: grey;
+}
+
+.seat__button-submit {
+    height: 40px;
+    display: flex;
+}

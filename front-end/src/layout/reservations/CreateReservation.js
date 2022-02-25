@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import "./CreateReservation.css"
 
 // Util Functions
 import { today } from "../../utils/date-time"
@@ -124,7 +125,7 @@ function CreateReservation() {
     }
 
     return (
-        <React.Fragment>
+        <div className="createReservation__main-container">
             <ErrorAlert error={tuesday} />
             <ErrorAlert error={pastTense} />
             <ErrorAlert error={outOfHours} />
@@ -208,7 +209,7 @@ function CreateReservation() {
             </div>
             </Form>
 
-        </React.Fragment>
+        </div>
     );
 };
 

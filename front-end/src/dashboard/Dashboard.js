@@ -4,6 +4,9 @@ import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom"
+
+import "./Dashboard.css"
 
 /**
  * Defines the dashboard page.
@@ -19,6 +22,40 @@ function Dashboard({ date }) {
 
   useEffect(loadDashboard, [date]);
 
+  let tempReservations = [
+    {
+      reservation_id: 1,
+      first_name: "jonathan",
+      last_name: "ramirez",
+      reservation_time: "13:00",
+      reservation_date: "2022-02-08",
+      people: 2
+    },
+    {
+      reservation_id: 2,
+      first_name: "jonathan",
+      last_name: "ramirez",
+      reservation_time: "14:00",
+      reservation_date: "2022-02-08",
+      people: 4
+    },
+    {
+      reservation_id: 3,
+      first_name: "jonathan",
+      last_name: "ramirez",
+      reservation_time: "15:00",
+      reservation_date: "2022-02-08",
+      people: 2
+    },
+    {
+      reservation_id: 4,
+      first_name: "jonathan",
+      last_name: "ramirez",
+      reservation_time: "16:00",
+      reservation_date: "2022-02-08",
+      people: 2
+    }
+  ]
 
 
   // * Mapper functions
@@ -32,7 +69,9 @@ function Dashboard({ date }) {
             <Card.Text>
               People: {reservation.people}
             </Card.Text>
-            <Button variant="primary" href={`reservations/${reservation.reservation_id}/seat`} >Seat</Button>
+            <Link to={`reservations/${reservation.reservation_id}/seat`}>
+              <Button variant="primary" >Seat</Button>
+            </Link>
           </Card.Body>
         </Card>
       </div>
@@ -68,14 +107,14 @@ function Dashboard({ date }) {
   }
 
   return (
-    <main>
+    <main className="dashboard__main-container">
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      {reservations.map(mapOutReservations)}
+      {tempReservations.map(mapOutReservations)}
 
       <div className="d-md-flex mt-4 mb-3">
         <h4 className="mb-0">Tables Available: </h4>

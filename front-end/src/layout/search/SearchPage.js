@@ -1,3 +1,4 @@
+import "./SearchPage.css"
 import React, { useState } from "react";
 
 import Form from "react-bootstrap/Form";
@@ -23,11 +24,12 @@ function SearchPage() {
     const [empty, setEmpty] = useState(null);
     const [reservations, setReservations] = useState([]);
     const [loaded, setLoaded] = useState(null);
+    const [clickedSearch, setClickedSearch] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // Set the searched state to true so the reservations will show
-        clickedSearch(true);
+        setClickedSearch(true);
         console.log(form)
         // check to see if the phone number is in the correct format
         // make the call to the api for the reservations
@@ -36,13 +38,14 @@ function SearchPage() {
         // set the state of the reservations to the call if it isnt empty
     }
     return (
-        <React.Fragment>
-            <h3>Search: </h3>
+        <div className="search__main-container">
+            <h3 className="search__main-title">Search: </h3>
 
             <Form>
-                <Form.Group>
+                <Form.Group className="search__input-container">
                     <Form.Label>Phone #: </Form.Label>
                     <Form.Control 
+                        className="review__input-field"
                         name="mobile_number"
                         placeholder="Enter a customer's phone number"
                         type="text"
@@ -59,7 +62,7 @@ function SearchPage() {
             </Form>
 
             {/*Depending on the state of the reservations output them*/}
-        </React.Fragment>
+        </div>
     )
 };
 

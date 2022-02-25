@@ -1,0 +1,27 @@
+.search__main-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 10px;
+    padding-left: 15px;
+    height: 250px;
+    padding-bottom: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.search__main-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.search__input-container {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.review__input-field {
+    width: 50%;
+}

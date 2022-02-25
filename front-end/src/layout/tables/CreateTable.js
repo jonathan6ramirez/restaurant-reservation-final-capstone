@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom"
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import "./CreateTable.css"
 
 import ErrorAlert from "../ErrorAlert";
 import { createTable } from "../../utils/api";
@@ -52,7 +53,7 @@ function CreateTable() {
     }
 
     return (
-    <React.Fragment >
+    <div className="createTable__main-container" >
         <ErrorAlert error={err} />
         <h3 className="text-center" >Create A Table</h3>
         <Form onSubmit={ handleSubmit }>
@@ -88,7 +89,7 @@ function CreateTable() {
             </div>
         </Form>
 
-    </React.Fragment>
+    </div>
     )
 } 
 

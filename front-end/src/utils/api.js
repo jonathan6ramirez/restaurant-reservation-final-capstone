@@ -112,7 +112,7 @@ export async function createTable(table, signal) {
 }
 
 /**
- * !!!make this into the reservations/reservationId/seat call 
+ * 
  * Retrieves the deck with the specified `deckId`
  * @param 
  *  the `id` property matching the desired deck.
@@ -121,7 +121,25 @@ export async function createTable(table, signal) {
  * @returns {Promise<any>}
  *  a promise that resolves to the saved deck.
  */
-export async function readDeck(deckId, signal) {
-  const url = `${API_BASE_URL}/decks/${deckId}?_embed=cards`;
+export async function readReservation(reservationId, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}`;
+  return await fetchJson(url, { signal }, {});
+}
+
+//!!!make this into the reservations/reservationId/seat call that submits a post
+//!!!request to seat the table
+
+/**
+ * 
+ * Retrieves the deck with the specified `deckId`
+ * @param 
+ *  the `id` property matching the desired deck.
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<any>}
+ *  a promise that resolves to the saved deck.
+ */
+export async function seatReservation(tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}`;
   return await fetchJson(url, { signal }, {});
 }
