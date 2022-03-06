@@ -105,7 +105,7 @@ function Dashboard({ date }) {
 
     return () => abortController.abort();
   }
-
+  console.log(reservations, "these are the reservations for the given date")
   return (
     <main className="dashboard__main-container">
       <h1>Dashboard</h1>
@@ -114,7 +114,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
-      {tempReservations.map(mapOutReservations)}
+      {reservations.length > 0 ? reservations.map(mapOutReservations) : null}
 
       <div className="d-md-flex mt-4 mb-3">
         <h4 className="mb-0">Tables Available: </h4>
