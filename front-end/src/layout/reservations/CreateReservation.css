@@ -5,3 +5,18 @@
     border-radius: 10px;
 }
 
+.container {
+    padding: 0;
+}
+
+.col-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+.group {
+    margin-bottom: 20px;
+}
+

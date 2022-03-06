@@ -2,7 +2,10 @@ import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import "./CreateReservation.css"
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import "./CreateReservation.css";
 
 // Util Functions
 import { today } from "../../utils/date-time"
@@ -29,7 +32,9 @@ function CreateReservation() {
     const initialFormState = {
         first_name: "",
         last_name: "",
-        mobile_number: "",
+        mobile_number1: "",
+        mobile_number2: "",
+        mobile_number3: "",
         reservation_date: "",
         reservation_time: "",
         people: 0,
@@ -55,6 +60,8 @@ function CreateReservation() {
             [target.name]: target.value,
         });
     };
+
+
 
     // Handles when the user clicks the submit button
     const handleSubmit = async (event) => {
@@ -155,12 +162,43 @@ function CreateReservation() {
 
                 <Form.Group>
                     <Form.Label>Mobile Number</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        name="mobile_number" 
-                        onChange={handleChange}
-                        required
-                    />
+                    <Container className="container">
+                        <Row>
+                            <Col>
+                                <Form.Control 
+                                    type="text" 
+                                    name="mobile_number1"
+                                    id="numberField"
+                                    onChange={handleChange}
+                                    placeholder="###"
+                                    maxlength="3"
+                                    required
+                                />
+                            </Col>
+                            <Col className="col-between">-</Col>
+                            <Col>
+                                <Form.Control 
+                                    type="text" 
+                                    name="mobile_number2" 
+                                    onChange={handleChange}
+                                    placeholder="###"
+                                    maxlength="3"
+                                    required
+                                />
+                            </Col>
+                            <Col className="col-between">-</Col>
+                            <Col>
+                                <Form.Control 
+                                    type="text" 
+                                    name="mobile_number3" 
+                                    onChange={handleChange}
+                                    placeholder="####"
+                                    maxlength="4"
+                                    required
+                                />
+                            </Col>
+                        </Row>
+                    </Container>
                 </Form.Group>
 
                 <Form.Group>
