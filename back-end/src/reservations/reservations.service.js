@@ -1,5 +1,9 @@
 const knex = require("../db/connection");
-
+/**
+* 
+* @param {*} reservation_date 
+* @returns list of reservations that match the given date
+*/ 
 function listByDate(reservation_date) {
     return knex("reservations")
         .distinct()
@@ -7,10 +11,20 @@ function listByDate(reservation_date) {
         .where({ "reservation_date": reservation_date})
         .orderBy("reservation_time", "asc");
 }
+/**
+* 
+* @returns all reservations regardless of date
+*/
 function list(){
     return knex("reservations")
         .select("*")
 }
+
+/**
+ * 
+ * @param {*} reservation 
+ * @returns the created record within the database
+ */
 function create(reservation) {
     return knex("reservations")
     .insert(reservation)
@@ -18,6 +32,11 @@ function create(reservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
+/**
+* 
+* @param {*} reservation_id 
+* @returns reservation that is matched with the given id
+*/
 function read(reservation_id) {
     return knex("reservations").select("*").where({ reservation_id }).first();
 }

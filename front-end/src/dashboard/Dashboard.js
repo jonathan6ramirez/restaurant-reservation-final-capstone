@@ -61,7 +61,7 @@ function Dashboard({ date }) {
   // * Mapper functions
   const mapOutReservations = (reservation, index) => {
     return (
-      <div key={index} className="row justify-content-center" >
+      <div key={index} className="dashboard__card" >
         <Card>
           <Card.Header as="h5">Reservation for : {reservation.first_name} {reservation.last_name}</Card.Header>
           <Card.Body>
@@ -81,7 +81,7 @@ function Dashboard({ date }) {
   const mapOutTables = (table, index) => {
     const occupied = table.is_occupied ? "Occupied": "Free"
     return (
-      <div key={index} className="row" >
+      <div key={index} className="dashboard__card" >
         <Card>
           <Card.Header as="h5">Table: {table.table_name}</Card.Header>
           <Card.Body>

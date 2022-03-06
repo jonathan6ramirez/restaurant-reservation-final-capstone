@@ -359,7 +359,7 @@ so that I can quickly access a customer's reservation when they call about their
    - display `No reservations found` if there are no records found after clicking the Find button.
 
 > **Hint** To search for a partial or complete phone number, you should ignore all formatting and search only for the digits.
-> You will need to remove any non-numeric characters from the submitted mobile number and also use the PostgreSQL translate function.
+> You will need to remove any non-numeric characters from the submitted mobile number and also use the PostgreSQL  translate function.
 >
 > The following function will perform the correct search.
 >

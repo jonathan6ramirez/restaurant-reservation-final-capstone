@@ -44,22 +44,24 @@ function Seat() {
         setErr(null);
         //! Make sure to to checks and check if the table has enough capacity for
         //! the reservation as well as making sure the value is greater than 0
+        //TODO: the api needs to return the reservation for the matched id
         e.preventDefault();
+        const selectedTable = tables.find((currentTable) => currentTable.table_id == table)
+        console.log(selectedTable, "this is the selected table from the dropdown");
+        console.log(reservation, "this is the loaded reservation")
         if (table < 1){
             setErr({message: `Pick a table to seat the reservation.`})
         }
-        console.log(table)
     }
     //make a function that makes the request to the api to get the reservation info
     //make a function that makes the request to the api to get the tables
     //put that function inside a useeffect
     //make a render function for the tables to put into an option dropdown
     //whenever they click on the seat table run validations
+    //the onChange function passes the capacity to the state so that the validations can be done
     //check the capacity
     //check the availability
     //send the requests with the object: `{ data: { reservation_id: x } }`
-    console.log(reservationId, 'this is the reservation id from the parameters')
-    console.log(tables, "hey there")
     return (
         <div className="seat__main-container">
             <h2 className="seat__main-title">Select a table</h2>
