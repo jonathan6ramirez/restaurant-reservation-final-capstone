@@ -103,9 +103,14 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(setTableError);
 
-    return () => abortController.abort();
-  }
-  console.log(reservations, "these are the reservations for the given date")
+      
+      return () => abortController.abort();
+    }
+
+  // todo the sort function mutates the array ex. tables.sort((a, b) => a > b)
+  console.log(tables, "this is the state for the tables yo")
+  //console.log(reservations, "these are the reservations for the given date"
+
   return (
     <main className="dashboard__main-container">
       <h1>Dashboard</h1>
