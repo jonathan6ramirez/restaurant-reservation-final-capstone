@@ -32,16 +32,20 @@ function CreateReservation() {
     const initialFormState = {
         first_name: "",
         last_name: "",
-        mobile_number1: "",
-        mobile_number2: "",
-        mobile_number3: "",
+        mobile_number: "",
         reservation_date: "",
         reservation_time: "",
         people: 0,
     }
+    const initialPhoneState = {
+        mobile_number1: "",
+        mobile_number2: "",
+        mobile_number3: "",
+    }
 
     // State for the form
     const [form, setForm] = useState({ ...initialFormState });
+    const [phoneNumbers, setPhoneNumbers] = useState({ ...initialPhoneState });
     
     //*Error holders for all the possible errors that ocurr during validation 
     // This is the state that will check to see if there is an error
@@ -61,6 +65,12 @@ function CreateReservation() {
         });
     };
 
+    const handlePhoneChange = ({ target }) => {
+        setPhoneNumbers({
+            ...phoneNumbers,
+            [target.name]: target.value,
+        });
+    };
 
 
     // Handles when the user clicks the submit button
@@ -123,7 +133,10 @@ function CreateReservation() {
             return
         }
         form["people"] = Number(form["people"])
+        const phoneNumber = Object.values(phoneNumbers).join("-");
+        form["mobile_number"] = phoneNumber;
         const data = {...form}
+        console.log(data, "this is the full form object before the api call")
         // Make the call to the API
         await createReservation({ data });
         // Clean up the form state
@@ -169,7 +182,7 @@ function CreateReservation() {
                                     type="text" 
                                     name="mobile_number1"
                                     id="numberField"
-                                    onChange={handleChange}
+                                    onChange={handlePhoneChange}
                                     placeholder="###"
                                     maxlength="3"
                                     required
@@ -180,7 +193,7 @@ function CreateReservation() {
                                 <Form.Control 
                                     type="text" 
                                     name="mobile_number2" 
-                                    onChange={handleChange}
+                                    onChange={handlePhoneChange}
                                     placeholder="###"
                                     maxlength="3"
                                     required
@@ -191,7 +204,7 @@ function CreateReservation() {
                                 <Form.Control 
                                     type="text" 
                                     name="mobile_number3" 
-                                    onChange={handleChange}
+                                    onChange={handlePhoneChange}
                                     placeholder="####"
                                     maxlength="4"
                                     required
