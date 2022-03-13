@@ -103,6 +103,7 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(setTableError);
 
+      console.log(tables, "these are the tables returned from the ")
     return () => abortController.abort();
   }
   console.log(reservations, "these are the reservations for the given date")
