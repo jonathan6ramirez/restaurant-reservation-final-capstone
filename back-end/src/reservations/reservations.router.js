@@ -15,4 +15,8 @@ router
     .post(controller.create)
     .all(methodNotAllowed);
 
+router
+    .route("/:reservationId")
+    .get(controller.read)
+
 module.exports = router;

@@ -3,6 +3,9 @@ const tablesService = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
+// TODO make a function for the put to seat a reservation
+// TODO you need to check that the table exists in the database before hand
+
 // *Templates to validate the data passed to the api
 const VALID_PROPERTIES = [
     "table_name",
@@ -26,6 +29,16 @@ function hasOnlyValidProperties(req, res, next){
 
 const hasRequiredProperties = hasProperties("table_name", "capacity");
 
+async function tableExists(req, res, next) {
+    const table = await tablesService.read(req.params.tableId);
+    // console.warn("---------", req.params.tableId, "----------");
+    if (table){
+        res.locals.table = table
+        return next();
+    }
+    next({ status: 404, message: "Table not found."})
+}
+
 // *CRUD functions
 async function create(req, res){
     const table = req.body.data;
@@ -35,7 +48,18 @@ async function create(req, res){
 
 async function list(req, res){
     const data = await tablesService.list();
-    console.log(data, "this is the data returned from the knex call to the database inside the tables controller")
+    res.json({ data })
+}
+
+async function read (req, res) {
+    const { table: data } = res.locals;
+    res.json({data});
+}
+
+async function seatReservation (req, res) {
+    const { table: data } = res.locals
+    console.log(data, "this is the data from the put request")
+    console.log(req.body, "this is from the body of the req")
     res.json({ data })
 }
 
@@ -45,5 +69,13 @@ module.exports = {
         hasOnlyValidProperties,
         hasRequiredProperties,
         asyncErrorBoundary(create)
-    ]
+    ],
+    read: [
+        asyncErrorBoundary(tableExists),
+        asyncErrorBoundary(read),
+    ],
+    seat: [
+        asyncErrorBoundary(tableExists),
+        asyncErrorBoundary(seatReservation)
+    ],
 }

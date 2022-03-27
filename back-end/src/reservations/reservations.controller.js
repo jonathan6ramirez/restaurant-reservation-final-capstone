@@ -147,6 +147,15 @@ const hasRequiredProperties = hasProperties(  "first_name",
 "people",
 )
 
+async function reservationExists (req, res, next) {
+  const reservation = await reservationsService.read(req.params.reservationId);
+  if(reservation){
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({ status: 404, message: "Reservation cannot be found."})
+}
+
 // CRUD Functions
 async function list(req, res) {
   const date = req.query.date
@@ -165,6 +174,11 @@ async function create(req, res){
   res.status(201).json({ data });
 }
 
+async function read(req, res) {
+  const { reservation: data } = res.locals;
+  res.json({data});
+}
+
 module.exports = {
   list,
   create: [
@@ -173,4 +187,8 @@ module.exports = {
     validateProperties,
     asyncErrorBoundary(create)
   ],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(read),
+  ]
 };

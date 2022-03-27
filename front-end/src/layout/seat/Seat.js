@@ -1,7 +1,7 @@
 import "./Seat.css"
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { readReservation, listTables } from "../../utils/api";
+import { readReservation, listTables, seatReservation } from "../../utils/api";
 import Button from "react-bootstrap/Button";
 
 
@@ -16,42 +16,52 @@ function Seat() {
     const [table, setTable] = useState(0);
     const [err, setErr] = useState(null);
 
-    const tempData = [
-        {
-            table_id: 2,
-            table_name: "Cool",
-            capacity: 4,
+    useEffect(() => {
+        async function loadReservation() {
+            const abortController = new AbortController();
+            try {
+                const reservationRes = await readReservation(reservationId, abortController.signal);
+                // console.log(reservationRes, "this is the response from the readReservation call");
+                setReservation(reservationRes);
+            } catch (err) {
+                setReservationError(err);
+            }
+
+            try {
+                const tablesRes = await listTables(abortController.signal);
+                // console.log(tablesRes, "this is the response from the listTables call");
+                setTables(tablesRes);
+            } catch (err) {
+                setTableError(err)
+            }
+            // readReservation(reservationId, abortController.signal)
+            //     .then(setReservation)
+            //     .catch(setReservationError);
+            // listTables(abortController.signal)
+            //     .then(setTables)
+            //     .catch(setTableError);
         }
-    ]
-
-    async function loadReservation() {
-        const abortController = new AbortController();
-        readReservation(reservationId, abortController.signal)
-            .then(setReservation)
-            .catch(setReservationError);
-        listTables(abortController.signal)
-            .then(setTables)
-            .catch(setTableError);
-    }
-
-    useEffect(() => {loadReservation()}, []);
+        loadReservation()
+    }, []);
 
     const handleChange = ({target}) => {
         setTable(target.value)
     }
 
-    const handleSubmit = (e) => {
-        setErr(null);
-        //! Make sure to to checks and check if the table has enough capacity for
-        //! the reservation as well as making sure the value is greater than 0
-        //TODO: the api needs to return the reservation for the matched id
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setErr(null);
+        const abortController = new AbortController();
         const selectedTable = tables.find((currentTable) => currentTable.table_id == table)
-        console.log(selectedTable, "this is the selected table from the dropdown");
-        console.log(reservation, "this is the loaded reservation")
         if (table < 1){
             setErr({message: `Pick a table to seat the reservation.`})
         }
+
+        if(selectedTable.capacity < reservation.people){
+            setErr({message: `Table does not seat enough people.`})
+        }
+        const data = {reservationId: reservationId, tableId: selectedTable.table_id}
+        const res = await seatReservation(data, abortController.signal);
     }
     //make a function that makes the request to the api to get the reservation info
     //make a function that makes the request to the api to get the tables
@@ -71,7 +81,13 @@ function Seat() {
                 <Button type="secondary" className="seat__button-cancel" onClick={() => history.goBack()}>Cancel</Button>
                 <div>
                     {err && 
-                        <div className="seat__err-message"><p>Please pick a table</p></div>
+                        <div className="seat__err-message"><p>{err.message}</p></div>
+                    }
+                    {reservationError &&
+                        <div className="seat__err-message"><p>{reservationError}</p></div>
+                    }
+                    {tableError &&
+                        <div className="seat__err-message"><p>{tableError}</p></div>
                     }
                     <select 
                         className="seat__dropdown-container"
@@ -81,7 +97,7 @@ function Seat() {
                         required
                         >
                         <option value="-1">Please Select A Table</option>
-                        {tables.map((table, index) => (
+                        {Array.isArray(tables) && tables.map((table, index) => (
                             <option key={index} value={table.table_id}>
                                 {table.table_name} - {table.capacity}
                             </option>
@@ -90,19 +106,9 @@ function Seat() {
                 </div>
                 <Button type="submit" className="seat__button-submit" onClick={handleSubmit}>Submit</Button>
             </div>
-            {tables.map((table, index) => {
-                <p key={index}>{table.table_name}</p>
-            })}
         </div>
     )
 }
 
 
-//{tables.length > 0 && (
-//     tempData.map((table, index) => {
-//         <option key={index} value={table.table_id}>
-//             {table.table_name}
-//         </option>
-//     })
-// )}
 export default Seat;

@@ -111,7 +111,7 @@ export async function createTable(table, signal) {
   return await fetchJson(url, options, {});
 }
 
-/**
+/*
  * 
  * Retrieves the deck with the specified `deckId`
  * @param 
@@ -123,7 +123,12 @@ export async function createTable(table, signal) {
  */
 export async function readReservation(reservationId, signal) {
   const url = `${API_BASE_URL}/reservations/${reservationId}`;
-  return await fetchJson(url, { signal }, {});
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, {});
 }
 
 //!!!make this into the reservations/reservationId/seat call that submits a post
@@ -139,7 +144,14 @@ export async function readReservation(reservationId, signal) {
  * @returns {Promise<any>}
  *  a promise that resolves to the saved deck.
  */
-export async function seatReservation(tableId, signal) {
-  const url = `${API_BASE_URL}/tables/${tableId}`;
-  return await fetchJson(url, { signal }, {});
+export async function seatReservation({reservationId, tableId}, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const data = {reservationId};
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(data),
+    signal,
+  }
+  return await fetchJson(url, options, {});
 }

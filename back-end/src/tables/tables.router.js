@@ -7,7 +7,14 @@ router
     .route("/")
     .get(controller.list)
     .post(controller.create)
-    .all(methodNotAllowed)
+    .all(methodNotAllowed);
+
+router
+    .route("/:tableId/seat")
+    .put(controller.seat)
+    .all(methodNotAllowed);
+
+// TODO MAKE A ROUTE FOR A PUT TO `/:table_id/seat`
 
 module.exports = router;
 
