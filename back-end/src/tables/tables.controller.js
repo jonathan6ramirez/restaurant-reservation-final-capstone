@@ -58,8 +58,12 @@ async function read (req, res) {
 
 async function seatReservation (req, res) {
     const { table: data } = res.locals
-    console.log(data, "this is the data from the put request")
-    console.log(req.body, "this is from the body of the req")
+    const { data: { reservationId } } = req.body;
+    console.log(reservationId, "this is the data from the put request")
+    console.log("********", data, "********");
+    data.reservation_id = reservationId;
+    console.log("---------",data, "This is the data after the update")
+    console.log(reservationId, "this is from the body of the req")
     res.json({ data })
 }
 

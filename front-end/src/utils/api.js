@@ -150,7 +150,7 @@ export async function seatReservation({reservationId, tableId}, signal) {
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify(data),
+    body: JSON.stringify({data}),
     signal,
   }
   return await fetchJson(url, options, {});

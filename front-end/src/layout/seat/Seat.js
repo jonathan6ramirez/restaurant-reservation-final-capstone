@@ -21,7 +21,6 @@ function Seat() {
             const abortController = new AbortController();
             try {
                 const reservationRes = await readReservation(reservationId, abortController.signal);
-                // console.log(reservationRes, "this is the response from the readReservation call");
                 setReservation(reservationRes);
             } catch (err) {
                 setReservationError(err);
@@ -29,17 +28,10 @@ function Seat() {
 
             try {
                 const tablesRes = await listTables(abortController.signal);
-                // console.log(tablesRes, "this is the response from the listTables call");
                 setTables(tablesRes);
             } catch (err) {
                 setTableError(err)
             }
-            // readReservation(reservationId, abortController.signal)
-            //     .then(setReservation)
-            //     .catch(setReservationError);
-            // listTables(abortController.signal)
-            //     .then(setTables)
-            //     .catch(setTableError);
         }
         loadReservation()
     }, []);
@@ -54,13 +46,13 @@ function Seat() {
         const abortController = new AbortController();
         const selectedTable = tables.find((currentTable) => currentTable.table_id == table)
         if (table < 1){
-            setErr({message: `Pick a table to seat the reservation.`})
+            return setErr({message: `Pick a table to seat the reservation.`})
         }
 
         if(selectedTable.capacity < reservation.people){
-            setErr({message: `Table does not seat enough people.`})
+            return setErr({message: `Table does not seat enough people.`})
         }
-        const data = {reservationId: reservationId, tableId: selectedTable.table_id}
+        const data = {reservationId: parseInt(reservationId), tableId: selectedTable.table_id}
         const res = await seatReservation(data, abortController.signal);
     }
     //make a function that makes the request to the api to get the reservation info
