@@ -41,9 +41,14 @@ function Dashboard({ date }) {
             <Card.Text>
               People: {reservation.people}
             </Card.Text>
-            <Link to={`reservations/${reservation.reservation_id}/seat`}>
-              <Button variant="primary" >Seat</Button>
+            <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+              <Button variant="warning" className="search__edit-btn">Edit</Button>
             </Link>
+            {reservation.status == "booked" &&
+                <Link to={`reservations/${reservation.reservation_id}/seat`}>
+                    <Button variant="primary" >Seat</Button>
+                </Link>
+            }
           </Card.Body>
         </Card>
       </div>
@@ -101,7 +106,7 @@ function Dashboard({ date }) {
       </div>
       {tables.map(mapOutTables)}
 
-      <DashboardModal show={show} setShow={setShow} selectedTable={selectedTable} />
+      <DashboardModal show={show} setShow={setShow} selectedTable={selectedTable} setTables={setTables} />
     </main>
   );
 }

@@ -1,10 +1,22 @@
-import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button"
+import { emptyTable, listTables } from "../utils/api";
 
-function DashboardModal ({ show, setShow, selectedTable }) {
+function DashboardModal ({ show, setShow, selectedTable, setTables }) {
     const handleClose = () => setShow(false);
-    console.log("this is the selected table", selectedTable)
+    const onConfirm = async (table) => {
+        const abortController = new AbortController();
+        console.log(table, "confirmation clicked")
+        try {
+            await emptyTable(table.table_id, abortController.signal);
+            const tables = await listTables(abortController.signal);
+            setTables(tables)
+            setShow(!show)
+        } catch (err) {
+            console.log("!!!!!", err, "!!!!!")
+        }
+    }
+
     return (
         <>
             <Modal 
@@ -21,7 +33,7 @@ function DashboardModal ({ show, setShow, selectedTable }) {
                 <Button variant="secondary" onClick={handleClose}>
                 Cancel
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={() => onConfirm(selectedTable)}>
                 Yes
                 </Button>
             </Modal.Footer>

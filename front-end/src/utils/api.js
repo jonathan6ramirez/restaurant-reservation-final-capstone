@@ -113,9 +113,9 @@ export async function createTable(table, signal) {
 
 /*
  * 
- * Retrieves the deck with the specified `deckId`
- * @param 
- *  the `id` property matching the desired deck.
+ * returns the reservation matching the reservationId
+ * @param reservationId
+ *  
  * @param signal
  *  optional AbortController.signal
  * @returns {Promise<any>}
@@ -131,18 +131,14 @@ export async function readReservation(reservationId, signal) {
   return await fetchJson(url, options, {});
 }
 
-//!!!make this into the reservations/reservationId/seat call that submits a post
-//!!!request to seat the table
 
-/**
+/*
  * 
- * Retrieves the deck with the specified `deckId`
- * @param 
- *  the `id` property matching the desired deck.
+ * assigns a reservations to a tables
  * @param signal
  *  optional AbortController.signal
  * @returns {Promise<any>}
- *  a promise that resolves to the saved deck.
+ * 
  */
 export async function seatReservation({reservationId, tableId}, signal) {
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
@@ -151,6 +147,26 @@ export async function seatReservation({reservationId, tableId}, signal) {
     method: "PUT",
     headers,
     body: JSON.stringify({data}),
+    signal,
+  }
+  return await fetchJson(url, options, {});
+}
+
+export async function emptyTable(tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  }
+  return await fetchJson(url, options, {});
+}
+
+export async function searchReservationsByPhone(phone, signal) {
+  const url = `${API_BASE_URL}/reservations?mobile_number=${phone}`;
+  const options = {
+    method: "GET",
+    headers,
     signal,
   }
   return await fetchJson(url, options, {});

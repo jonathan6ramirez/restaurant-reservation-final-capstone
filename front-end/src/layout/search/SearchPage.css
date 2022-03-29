@@ -6,9 +6,7 @@
     border-radius: 10px;
     margin: auto;
     margin-top: 10px;
-    padding-left: 15px;
-    height: 250px;
-    padding-bottom: 25px;
+    padding: 25px 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -24,4 +22,12 @@
 
 .search__input-field {
     width: 50%;
+}
+
+.search__card {
+    margin: 10px 0px;
+}
+
+.search__edit-btn {
+    margin: 0px 10px;
 }

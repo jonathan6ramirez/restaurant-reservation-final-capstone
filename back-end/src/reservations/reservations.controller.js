@@ -159,11 +159,12 @@ async function reservationExists (req, res, next) {
 // CRUD Functions
 async function list(req, res) {
   const date = req.query.date
+  const phone = req.query.mobile_number; 
   let data;
   if (date){
     data = await reservationsService.listByDate(date);
-  } else {
-    data = await reservationsService.list();
+  } else if (phone) {
+    data = await reservationsService.reservationsByPhone(phone);
   }
   res.json({ data });
 }

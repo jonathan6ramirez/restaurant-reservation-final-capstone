@@ -3,7 +3,6 @@ const reservationsService = require("../reservations/reservations.service");
 
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const { table } = require("../db/connection");
 
 // TODO make a function for the put to seat a reservation
 // TODO you need to check that the table exists in the database before hand
@@ -65,10 +64,7 @@ async function seatReservation (req, res, next) {
         if(!reservation){
             return next({status: 400, message: "Reservaiton does not exist"})
         }
-        // console.log(reservation.people, "this is the reservation found")
-        // console.log(data, "this is the table")
         if(reservation.people > data.capacity){
-            // console.log("capacity is not enough")
             return next({status: 400, message: "Table does not seat enough for the reservation"});
         }
         if (data.reservation_id){
@@ -80,7 +76,19 @@ async function seatReservation (req, res, next) {
         res.status(200).send({ updatedTable })
     } catch (err){
         console.log("!!!!", err, "!!!!")
-        // next({ status: 500, message: err});
+        return next({ status: 500, message: err});
+    }
+}
+
+async function removeReservation (req, res, next) {
+    try {
+        const { table: data } = res.locals;
+        data.reservation_id = null;
+        const updateTable = await tablesService.update(data);
+        res.status(200).send({ updateTable })
+    } catch (err) {
+        console.log("!!!!", err, "!!!!")
+        return next({ status: 500, message: err});
     }
 }
 
@@ -99,4 +107,8 @@ module.exports = {
         asyncErrorBoundary(tableExists),
         asyncErrorBoundary(seatReservation)
     ],
+    delete: [
+        asyncErrorBoundary(tableExists),
+        asyncErrorBoundary(removeReservation)
+    ]
 }

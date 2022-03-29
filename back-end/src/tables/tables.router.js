@@ -12,6 +12,7 @@ router
 router
     .route("/:tableId/seat")
     .put(controller.seat)
+    .delete(controller.delete)
     .all(methodNotAllowed);
 
 // TODO MAKE A ROUTE FOR A PUT TO `/:table_id/seat`
