@@ -45,7 +45,7 @@ function SearchPage() {
                 <Form.Group className="search__input-container">
                     <Form.Label>Phone #: </Form.Label>
                     <Form.Control 
-                        className="review__input-field"
+                        className="search__input-field"
                         name="mobile_number"
                         placeholder="Enter a customer's phone number"
                         type="text"

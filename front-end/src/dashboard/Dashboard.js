@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom"
+import DashboardModal from "./DashboardModal";
 
 import "./Dashboard.css"
 
@@ -20,43 +21,14 @@ function Dashboard({ date }) {
   const [tables, setTables] = useState([]);
   const [tablesError, setTableError] = useState(null);
 
+  const [show, setShow] = useState(false);
+  const handleShow = (table) => {
+    setSelectedTable(table);
+    setShow(true);
+  }
+  const [selectedTable, setSelectedTable] = useState({});
+
   useEffect(loadDashboard, [date]);
-
-  let tempReservations = [
-    {
-      reservation_id: 1,
-      first_name: "jonathan",
-      last_name: "ramirez",
-      reservation_time: "13:00",
-      reservation_date: "2022-02-08",
-      people: 2
-    },
-    {
-      reservation_id: 2,
-      first_name: "jonathan",
-      last_name: "ramirez",
-      reservation_time: "14:00",
-      reservation_date: "2022-02-08",
-      people: 4
-    },
-    {
-      reservation_id: 3,
-      first_name: "jonathan",
-      last_name: "ramirez",
-      reservation_time: "15:00",
-      reservation_date: "2022-02-08",
-      people: 2
-    },
-    {
-      reservation_id: 4,
-      first_name: "jonathan",
-      last_name: "ramirez",
-      reservation_time: "16:00",
-      reservation_date: "2022-02-08",
-      people: 2
-    }
-  ]
-
 
   // * Mapper functions
   const mapOutReservations = (reservation, index) => {
@@ -79,14 +51,23 @@ function Dashboard({ date }) {
   }
 
   const mapOutTables = (table, index) => {
-    const occupied = table.is_occupied ? "Occupied": "Free"
+    const occupied = table.reservation_id ? "Occupied": "Free"
     return (
       <div key={index} className="dashboard__card" >
         <Card>
           <Card.Header as="h5">Table: {table.table_name}</Card.Header>
           <Card.Body>
             <Card.Title>Capacity: {table.capacity}</Card.Title>
-            <Card.Text data-table-id-status={table.table_id} >Is Occupied: {occupied}</Card.Text>
+            <Card.Text data-table-id-status={table.table_id} >Status: {occupied}</Card.Text>
+            {table.reservation_id && 
+              <div>
+                <Button 
+                  variant="primary" 
+                  onClick={() => handleShow(table)}
+                  data-table-id-finish={table.table_id}
+                >Finish</Button>
+              </div>
+            }
           </Card.Body>
         </Card>
       </div>
@@ -102,11 +83,9 @@ function Dashboard({ date }) {
     listTables(abortController.signal)
       .then(setTables)
       .catch(setTableError);
-
-      console.log(tables, "these are the tables returned from the ")
     return () => abortController.abort();
   }
-  console.log(reservations, "these are the reservations for the given date")
+
   return (
     <main className="dashboard__main-container">
       <h1>Dashboard</h1>
@@ -121,6 +100,8 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Tables Available: </h4>
       </div>
       {tables.map(mapOutTables)}
+
+      <DashboardModal show={show} setShow={setShow} selectedTable={selectedTable} />
     </main>
   );
 }

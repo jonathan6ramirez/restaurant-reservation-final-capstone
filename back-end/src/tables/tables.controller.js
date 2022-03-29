@@ -1,7 +1,9 @@
 const tablesService = require("./tables.service");
+const reservationsService = require("../reservations/reservations.service");
 
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const { table } = require("../db/connection");
 
 // TODO make a function for the put to seat a reservation
 // TODO you need to check that the table exists in the database before hand
@@ -31,7 +33,6 @@ const hasRequiredProperties = hasProperties("table_name", "capacity");
 
 async function tableExists(req, res, next) {
     const table = await tablesService.read(req.params.tableId);
-    // console.warn("---------", req.params.tableId, "----------");
     if (table){
         res.locals.table = table
         return next();
@@ -56,15 +57,31 @@ async function read (req, res) {
     res.json({data});
 }
 
-async function seatReservation (req, res) {
-    const { table: data } = res.locals
-    const { data: { reservationId } } = req.body;
-    console.log(reservationId, "this is the data from the put request")
-    console.log("********", data, "********");
-    data.reservation_id = reservationId;
-    console.log("---------",data, "This is the data after the update")
-    console.log(reservationId, "this is from the body of the req")
-    res.json({ data })
+async function seatReservation (req, res, next) {
+    try{
+        const { table: data } = res.locals
+        const { data: { reservationId } } = req.body;
+        const reservation = await reservationsService.read(reservationId);
+        if(!reservation){
+            return next({status: 400, message: "Reservaiton does not exist"})
+        }
+        // console.log(reservation.people, "this is the reservation found")
+        // console.log(data, "this is the table")
+        if(reservation.people > data.capacity){
+            // console.log("capacity is not enough")
+            return next({status: 400, message: "Table does not seat enough for the reservation"});
+        }
+        if (data.reservation_id){
+            console.log("there is a reservation associated with the table")
+            return next({ status: 400, message: "Table is already occupied"});
+        }
+        data.reservation_id = reservationId;
+        const updatedTable = await tablesService.update(data);
+        res.status(200).send({ updatedTable })
+    } catch (err){
+        console.log("!!!!", err, "!!!!")
+        // next({ status: 500, message: err});
+    }
 }
 
 module.exports = {

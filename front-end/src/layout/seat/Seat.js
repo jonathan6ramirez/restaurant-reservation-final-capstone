@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 
 
 function Seat() {
-    //Getting the reservation id from the params to submit the seat request to the api
     const { reservationId } = useParams();
     const history = useHistory();
     const [reservation, setReservation] = useState([]);
@@ -54,16 +53,8 @@ function Seat() {
         }
         const data = {reservationId: parseInt(reservationId), tableId: selectedTable.table_id}
         const res = await seatReservation(data, abortController.signal);
+        console.log(res)
     }
-    //make a function that makes the request to the api to get the reservation info
-    //make a function that makes the request to the api to get the tables
-    //put that function inside a useeffect
-    //make a render function for the tables to put into an option dropdown
-    //whenever they click on the seat table run validations
-    //the onChange function passes the capacity to the state so that the validations can be done
-    //check the capacity
-    //check the availability
-    //send the requests with the object: `{ data: { reservation_id: x } }`
     return (
         <div className="seat__main-container">
             <h2 className="seat__main-title">Select a table</h2>
