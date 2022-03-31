@@ -32,6 +32,7 @@ function Dashboard({ date }) {
 
   // * Mapper functions
   const mapOutReservations = (reservation, index) => {
+    const reservation_id = reservation.reservation_id
     return (
       <div key={index} className="dashboard__card" >
         <Card>
@@ -41,13 +42,18 @@ function Dashboard({ date }) {
             <Card.Text>
               People: {reservation.people}
             </Card.Text>
-            <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-              <Button variant="warning" className="search__edit-btn">Edit</Button>
-            </Link>
             {reservation.status == "booked" &&
-                <Link to={`reservations/${reservation.reservation_id}/seat`}>
-                    <Button variant="primary" >Seat</Button>
-                </Link>
+              <Button variant="danger">Cancel</Button>
+            }
+            {reservation.status == "booked" &&
+              <Link to={`/reservations/${reservation_id}/edit`}>
+                <Button variant="warning" className="search__edit-btn">Edit</Button>
+              </Link>
+            }
+            {reservation.status == "booked" &&
+              <Link to={`reservations/${reservation.reservation_id}/seat`}>
+                <Button variant="primary" >Seat</Button>
+              </Link>
             }
           </Card.Body>
         </Card>

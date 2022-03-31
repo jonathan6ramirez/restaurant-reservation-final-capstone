@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import{ useState } from "react"
 import { useHistory } from "react-router-dom"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
@@ -239,7 +239,7 @@ function CreateReservation() {
                     <Form.Control 
                         type="number"
                         min="1"
-                        max="20"
+                        max="200"
                         name="people"
                         onChange={handleChange}
                         required
