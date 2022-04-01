@@ -20,15 +20,25 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTableError] = useState(null);
+  const [selectedTable, setSelectedTable] = useState({});
+  const [selectedReservation, setSelectedReservation] = useState({});
 
   const [show, setShow] = useState(false);
+  
   const handleShow = (table) => {
     setSelectedTable(table);
     setShow(true);
   }
-  const [selectedTable, setSelectedTable] = useState({});
+
+  const handleCancelClick = (reservation) => {
+    setSelectedReservation(reservation);
+    setShow(true);
+  }
 
   useEffect(loadDashboard, [date]);
+
+  //TODO make the api call to cancel the reservation using PUT to 
+  //TODO `/reservations/:reservation_id/status` w/a body `{data: { status: "cancelled" } }`
 
   // * Mapper functions
   const mapOutReservations = (reservation, index) => {
@@ -43,7 +53,11 @@ function Dashboard({ date }) {
               People: {reservation.people}
             </Card.Text>
             {reservation.status == "booked" &&
-              <Button variant="danger">Cancel</Button>
+              <Button 
+                variant="danger" 
+                onClick={() => handleCancelClick(reservation)}
+                data-reservation-id-cancel={reservation.reservation_id}
+              >Cancel</Button>
             }
             {reservation.status == "booked" &&
               <Link to={`/reservations/${reservation_id}/edit`}>
@@ -112,7 +126,7 @@ function Dashboard({ date }) {
       </div>
       {tables.map(mapOutTables)}
 
-      <DashboardModal show={show} setShow={setShow} selectedTable={selectedTable} setTables={setTables} />
+      <DashboardModal date={date} show={show} setShow={setShow} selectedTable={selectedTable} setTables={setTables} selectedReservation={selectedReservation} setReservations={setReservations} />
     </main>
   );
 }

@@ -171,3 +171,15 @@ export async function searchReservationsByPhone(phone, signal) {
   }
   return await fetchJson(url, options, {});
 }
+
+export async function updateReservationStatus ({status, reservationId}, signal) {
+  const url = `/reservations/${reservationId}/status`
+  const data = { status };
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal,
+  }
+  return await fetchJson(url, options, {})
+}
