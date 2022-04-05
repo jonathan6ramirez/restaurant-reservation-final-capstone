@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { searchReservationsByPhone } from "../../utils/api";
+import SearchPageModal from "./SearchPageModal";
 
 function SearchPage() {
 
@@ -27,8 +28,11 @@ function SearchPage() {
     const [empty, setEmpty] = useState(false);
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [clickedSearch, setClickedSearch] = useState(false);
     const [err, setErr] = useState("");
+
+    // State for the modal
+    const [show, setShow] = useState(false)
+    const [reservation, setReservation] = useState({});
 
     const handleSubmit = async (event) => {
         if(form.mobile_number == "") return setErr("")
@@ -50,6 +54,11 @@ function SearchPage() {
         }
     }
 
+    const handleCancelShow = (reservation) => {
+        setReservation(reservation);
+        setShow(!show)
+    }
+
     const mapOutReservations = (reservation, index) => {
         const reservation_id = reservation.reservation_id
         return (
@@ -62,7 +71,7 @@ function SearchPage() {
                     People: {reservation.people}
                     </Card.Text>
                     {reservation.status == "booked" &&
-                        <Button variant="danger">Cancel</Button>
+                        <Button variant="danger" onClick={() => handleCancelShow(reservation)}>Cancel</Button>
                     }
                     {reservation.status == "booked" &&
                         <Link to={`/reservations/${reservation_id}/edit`}>
@@ -103,6 +112,7 @@ function SearchPage() {
             {loading && <span>Searching...</span>}
             {reservations.map(mapOutReservations)}
             {empty && <span>No reservations found</span>}
+            <SearchPageModal show={show} setShow={setShow} reservation={reservation} />
         </div>
     )
 };

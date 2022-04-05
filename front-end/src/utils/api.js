@@ -183,3 +183,15 @@ export async function updateReservationStatus ({status, reservationId}, signal) 
   }
   return await fetchJson(url, options, {})
 }
+
+export async function updateReservation ({updatedReservation, reservationId}, signal) {
+  const url = `/reservations/${reservationId}`
+  const data = { updatedReservation };
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal,
+  }
+  return await fetchJson(url, options, {})
+}
